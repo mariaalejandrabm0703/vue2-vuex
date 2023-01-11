@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vuejs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="elemento" class="container">
+        <padre></padre>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vuex@3.1.1/dist/vuex.js"></script>
+
+  <script>
+    // PADRE
+      Vue.component('padre',{
+          template: //html
+          `
+          <div class="p-5 bg-dark text-white">
+            <button @click="suma" >+</button>
+            <button @click="resta(1)" >-</button>
+            <h2> numero {{numero}} </h2>
+            <h2> edad {{edad}} </h2>
+            <hijo></hijo>
+          </div>
+          `,computed: {
+            ...Vuex.mapState(['edad','numero'])
+          },
+          methods: {
+            ...Vuex.mapMutations(['suma','resta'])
+          }
+      });
+      // HIJO
+      Vue.component('hijo',{
+          template: //html
+          `
+          <div class="p-5 bg-success text-white">
+            <button @click="suma" >+</button>
+            <button @click="resta(2)" >-</button>
+            <h2> numero {{numero}} </h2>
+            <h2> edad {{edad}} </h2>
+          </div>
+          `,
+          computed: {
+            ...Vuex.mapState(['edad','numero'])
+          },
+          methods: {
+            ...Vuex.mapMutations(['suma','resta'])
+          },
+      });
+
+      const store = new Vuex.Store({
+          state: {
+            numero: 5,
+            edad: 9
+          },
+          mutations: {
+            suma(state){
+                state.numero++;
+              },
+            resta(state,n){
+              state.numero=state.numero-n;
+            }
+          }
+      });
+
+    const con = new Vue({
+      el:"#elemento",
+      store: store
+    });
+  </script>
+</html>
