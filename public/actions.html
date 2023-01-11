@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vuejs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="elemento" class="container">
+        <padre></padre>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vuex@3.1.1/dist/vuex.js"></script>
+
+  <script>
+      // PADRE
+      Vue.component('padre',{
+          template: //html
+          `
+          <div class="p-5 bg-success text-white">
+            <button @click="getLengujes" >Carga Lenguajes</button>
+            <ul>
+                <li v-for="leguaje of lenguajes" >{{leguaje.nombre}}</li>
+            </ul>
+          </div>
+          `,
+          computed:{
+              ...Vuex.mapState(['lenguajes'])
+          }
+          ,
+          methods:{
+              ...Vuex.mapActions(['getLengujes'])
+          }
+      });
+      const store=new Vuex.Store({
+          state:{
+            lenguajes:[]
+          },
+          mutations:{
+            cargaLenguajes(state,lenguajes){
+                state.lenguajes=lenguajes;
+            }
+          },
+          actions:{
+            getLengujes: async function({commit}){
+                // const datos = await fetch("./datos.js", {
+	            //     mode: 'no-cors'
+                // });
+                // const lenguajes = await datos.json();
+                fetch('./datos.json', {mode: 'no-cors'}).then(response => {
+                    return response.json();
+                }).then(data => {
+                    // Work with JSON data here
+                    console.log(data);
+                }).catch(err => {
+                // Do something for an error here
+                console.log('error')
+                console.log(err)
+                });
+                // if(lenguajes.status === 200) {
+                //     console.log('entra aqui')
+                //     commit('cargaLenguajes',lenguajes);
+                // }
+            }
+          }
+      });
+    const con=new Vue({
+      el:"#elemento",
+      store:store
+    });
+  </script>
+</html>
