@@ -19,9 +19,9 @@
           template: //html
           `
           <div class="p-5 bg-success text-white">
-            <button @click="getLengujes" >Carga Lenguajes</button>
+            <button @click="getLengujes" >Carga Nombres</button>
             <ul>
-                <li v-for="leguaje of lenguajes" >{{leguaje.nombre}}</li>
+                <li v-for="leguaje of lenguajes" >{{leguaje.name}}</li>
             </ul>
           </div>
           `,
@@ -44,24 +44,13 @@
           },
           actions:{
             getLengujes: async function({commit}){
-                // const datos = await fetch("./datos.js", {
-	            //     mode: 'no-cors'
-                // });
-                // const lenguajes = await datos.json();
-                fetch('./datos.json', {mode: 'no-cors'}).then(response => {
-                    return response.json();
+                fetch('https://jsonplaceholder.typicode.com/users').then(response => {
+                  return response.json();
                 }).then(data => {
-                    // Work with JSON data here
-                    console.log(data);
+                  commit('cargaLenguajes',data);
                 }).catch(err => {
-                // Do something for an error here
-                console.log('error')
-                console.log(err)
+                  console.log(err)
                 });
-                // if(lenguajes.status === 200) {
-                //     console.log('entra aqui')
-                //     commit('cargaLenguajes',lenguajes);
-                // }
             }
           }
       });
